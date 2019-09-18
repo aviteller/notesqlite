@@ -34,6 +34,7 @@ func main() {
 	router.HandleFunc("/api/notes/{id}", controllers.UpdateNote).Methods("PUT")
 
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
+	//router.PathPrefix("/workouts").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 
 	port := "9000"
 	if port == "" {

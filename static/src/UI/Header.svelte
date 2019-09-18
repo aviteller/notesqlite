@@ -1,3 +1,8 @@
+<script>
+import NavLink from "./Navlink.svelte";
+import Button from './Button.svelte'
+</script>
+
 <style>
   header {
     position: fixed;
@@ -8,7 +13,7 @@
     background-color: white;
     border-bottom: 12px solid #199b14;
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
     margin-bottom: 20px;
@@ -17,9 +22,16 @@
   h1 {
     color: black;
     margin-top: 5px;
+    text-transform: uppercase
   }
+ 
 </style>
 
 <header>
-  <h1>Notes</h1>
+  <h1><slot/></h1>
+  <div class="links">
+  
+   <NavLink to="/"><Button>Notes</Button></NavLink>
+   <NavLink to="/workouts"><Button>Workouts</Button></NavLink>
+  </div>
 </header>

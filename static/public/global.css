@@ -60,3 +60,7 @@ button:active {
 button:focus {
 	border-color: #666;
 }
+
+.active {
+	text-transform: uppercase;
+}

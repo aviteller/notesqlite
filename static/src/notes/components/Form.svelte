@@ -1,6 +1,9 @@
 <script>
-  import notes from "../store.js";
+  import notes from "../notes-store.js";
   import { createEventDispatcher } from "svelte";
+  import Modal from "../../UI/Modal.svelte";
+  import TextInput from "../../UI/TextInput.svelte";
+  import Button from "../../UI/Button.svelte";
   const dispatch = createEventDispatcher();
 
   export let ID = null;
@@ -65,8 +68,7 @@
               throw new Error(data.message);
             }
             notes.addNote({ ...newNote, id: data.note.id });
-            title = "";
-            message = "";
+       dispatch("cancel");
           })
           .catch(err => console.log(err));
       }
@@ -75,57 +77,29 @@
 </script>
 
 <style>
-  .form-inline {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    justify-content: space-around;
-  }
 
-  .form-inline label {
-    margin: 5px 10px 5px 0;
-  }
-
-  /* Style the input fields */
-  .form-inline input {
-    vertical-align: middle;
-    margin: 5px 10px 5px 0;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-  }
-
-  /* Style the submit button */
-  .form-inline button {
-    padding: 10px 20px;
-    background-color: dodgerblue;
-    border: 1px solid #ddd;
-    color: white;
-  }
-
-  .form-inline button:hover {
-    background-color: royalblue;
-  }
-
-  @media (max-width: 800px) {
-    .form-inline input {
-      margin: 10px 0;
-    }
-
-    .form-inline {
-      flex-direction: column;
-      align-items: stretch;
-    }
-  }
 </style>
 
-<div class="form-inline">
-  <label for="title">Title</label>
-  <input type="text" id="title" bind:value={title} />
-  <label for="message">Message</label>
-  <textarea id="message" cols="30" rows="3" bind:value={message} />
-  <button on:click={onSubmit}>Submit</button>
-  {#if ID}
-    <button on:click={() => dispatch('cancel')}>Cancel</button>
-  {/if}
-</div>
+<Modal title={ID ? `Edit ${title}` : 'Add new Note'} on:cancel>
+
+  <TextInput
+    id="title"
+    label="Title"
+    value={title}
+    validityMessage="Please fill in correctly"
+    on:input={e => (title = e.target.value)} />
+
+  <TextInput
+    id="message"
+    label="Message"
+    value={message}
+    type="textarea"
+    rows="3"
+    bind:value={message} />
+
+  <div slot="footer">
+    <Button on:click={onSubmit}>Submit</Button>
+    <Button color="danger" on:click={() => dispatch('cancel')}>Cancel</Button>
+  </div>
+
+</Modal>
