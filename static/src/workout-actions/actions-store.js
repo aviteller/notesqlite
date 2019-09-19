@@ -61,7 +61,7 @@ const customActionsStore = {
       const updatedAction = { ...items[actionIndex], ...actionData };
       const updatedActions = [...items];
       updatedActions[actionIndex] = updatedAction;
-      return updatedactions;
+      return updatedActions;
     });
   },
   removeAction: id => {

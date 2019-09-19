@@ -52,14 +52,9 @@
     margin: 0.5rem 0;
   }
 
-  .action-controls {
+  .workout-buttons {
     display: flex;
-    color: #6b6b6b;
-    justify-content: space-around;
-  }
-
-  p {
-    font-size: 1.5rem;
+    justify-content: space-between;
   }
 </style>
 
@@ -67,6 +62,7 @@
 
   <div class="content">
     <div class="edit-form">
+      <Button mode="outline" on:click={() => pop()}>Go Back</Button>
       <h1>{name}</h1>
       <TextInput
         id="name"
@@ -85,10 +81,14 @@
         label="Workout Type"
         value={workoutType}
         on:input={e => (workoutType = e.target.value)} />
+      <div class="workout-buttons">
+        <Button mode="outline" color="success" on:click={() => pop()}>Update</Button>
+        <Button mode="outline" color="danger" on:click={() => pop()}>Delete</Button>
+      </div>
     </div>
     <div class="actions">
-   
-        <ActionGrid workoutID={params.id} />
+
+      <ActionGrid workoutID={params.id} />
       {#if actionsNo > 0}
         <!-- {#each actions as action} {action.name}{/each} -->
       {:else}
@@ -98,6 +98,6 @@
     <!-- <h2>{selectedMeetup.subtitle} - {selectedMeetup.address}</h2>
     <p>{selectedMeetup.description}</p>
     <Button href="mailto:{selectedMeetup.contactEmail}">Contact</Button> -->
-    <Button mode="outline" on:click={() => pop()}>Go Back</Button>
+
   </div>
 </section>

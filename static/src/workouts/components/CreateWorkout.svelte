@@ -6,6 +6,8 @@
   import { isEmpty, isValidEmail } from "../../helpers/validation";
   import workouts from "../workouts-store.js";
   let name = "";
+  let duration = "";
+  let workoutType = "";
   const dispatch = createEventDispatcher();
     const cancel = () => dispatch("cancel");
 
@@ -14,7 +16,9 @@
 
   const submitForm = () => {
     let newWorkout = {
-      name
+      name,
+      duration,
+      workoutType
     };
 
     workouts.addWorkout({
@@ -34,6 +38,19 @@
     valid={nameValid}
     validityMessage="Please enter a name"
     on:input={e => (name = e.target.value)} />
+
+  <TextInput
+    id="duration"
+    label="Duration"
+    value={duration}
+
+    on:input={e => (duration = e.target.value)} />
+  
+  <TextInput
+    id="workoutType"
+    label="Workout Type"
+    value={workoutType}
+    on:input={e => (workoutType = e.target.value)} />
     <div slot="footer">
     <Button on:click={cancel}>Cancel</Button>
     <Button on:click={submitForm} disabled={!formIsValid}>Save</Button>

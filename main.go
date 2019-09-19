@@ -24,9 +24,7 @@ func main() {
 		AllowedMethods: []string{"GET", "HEAD", "POST", "PUT", "OPTIONS", "DELETE"}, // Allowing only get, just an example
 	})
 
-	database := m.GetDB()
-	statement, _ := database.Prepare("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY autoincrement, title VARCHAR(255), message TEXT)")
-	statement.Exec()
+	m.InitTables()
 
 	router.HandleFunc("/api/notes", controllers.CreateNote).Methods("POST")
 	router.HandleFunc("/api/notes", controllers.GetNotes).Methods("GET")

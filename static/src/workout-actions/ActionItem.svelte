@@ -39,12 +39,12 @@
     border-radius: 5px;
     background: white;
     margin: 1rem;
+    padding: 1rem;
   }
 
   header,
-  .content,
   footer {
-    padding: 1rem;
+
     text-align: center;
   }
 
@@ -54,28 +54,12 @@
     font-family: "Roboto Slab", sans-serif;
   }
 
-  /* h1.is-favorite {
-    background: #01a129;
-    color: white;
-    padding: 0 0.5rem;
-    border-radius: 5px;
-  } */
-
   h2 {
     font-size: 1rem;
     color: #808080;
     margin: 0.5rem 0;
   }
 
-
-
-  div {
-    text-align: right;
-  }
-
-  .content {
-    height: 4rem;
-  }
 </style>
 
 <article>
@@ -97,17 +81,7 @@
  
   <footer>
   
-    {#if isLoading}
-      <span>Changing...</span>
-    {:else}
-      <!-- <Button
-        mode="outline"
-        color={isLiked ? 'null' : 'success'}
-        on:click={toggleLike}>
-        {isLiked ? 'UnLike' : 'Like'}
-      </Button> -->
-    {/if}
-    <Button color="success">Edit</Button>
+    <Button color="success" on:click={() => dispatch('edit', id)}>Edit</Button>
     <!-- <Button on:click={() => dispatch('showdetails', id)}>Show Details</Button> -->
 
   </footer>

@@ -1,5 +1,6 @@
 <script>
   import ActionItem from "./ActionItem.svelte";
+  import EditAction from "./EditAction.svelte";
   //import MeetupFilter from "./MeetupFilter.svelte";
   import Button from "../UI/Button.svelte";
   import { onDestroy, createEventDispatcher } from "svelte";
@@ -11,15 +12,24 @@
 
   export let workoutID;
 
+  let editMode = false;
+  let editedID = null;
+
   let actionsArray = [];
 
   const unsubscribe = actions.subscribe(items => {
     actionsArray = items.filter(i => i.workoutID !== parseInt(workoutID));
   });
 
-  console.log(actionsArray);
-
   onDestroy(() => unsubscribe());
+
+  const starEdit = e => {
+    editMode = true;
+    editedID = e.detail;
+  };
+
+  const addAction = () => (editMode = true);
+  const stopEdit = () => (editMode = false);
 </script>
 
 <style>
@@ -30,38 +40,43 @@
     grid-gap: 1rem;
   }
 
-  #meetup-controls {
-    margin: 1rem;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  #no-meetups {
-    margin: 1rem;
-  }
-
   @media (min-width: 768px) {
     #meetups {
       grid-template-columns: repeat(4, 1fr);
     }
   }
+
+  .action-controls {
+    display: flex;
+    color: #6b6b6b;
+    justify-content: space-around;
+  }
 </style>
 
-{#if actionsArray.length === 0}
-  <p id="no-meetups">No meetups found</p>
-{/if}
-<section id="meetups">
-  {#each actionsArray as action (action.id)}
+{#if editMode}
+  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} />
+{:else}
 
-    <div transition:scale animate:flip={{ duration: 300 }}>
-      <ActionItem
-        id={action.id}
-        name={action.name}
-        actionLength={action.actionLength}
-        actionType={action.actionType}
-        equipment={action.equipment}
-        workoutID={action.workoutID}
-        on:edit />
-    </div>
-  {/each}
-</section>
+  <div class="action-controls">
+    <h1>Actions</h1>
+    <Button on:click={addAction}>Add Action</Button>
+  </div>
+  <section id="meetups">
+    {#if actionsArray.length > 0}
+      {#each actionsArray as action (action.id)}
+        <div transition:scale animate:flip={{ duration: 300 }}>
+          <ActionItem
+            id={action.id}
+            name={action.name}
+            actionLength={action.actionLength}
+            actionType={action.actionType}
+            equipment={action.equipment}
+            workoutID={action.workoutID}
+            on:edit={starEdit} />
+        </div>
+      {/each}
+    {:else}
+      <h1>Add actions</h1>
+    {/if}
+  </section>
+{/if}
