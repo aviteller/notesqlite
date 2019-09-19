@@ -39,6 +39,7 @@
   const startEdit = e => {
     cancelEdit();
     setTimeout(() => {
+      
       editMode = "edit";
       editedId = e.detail;
     }, 100);

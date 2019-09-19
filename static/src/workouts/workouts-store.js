@@ -2,42 +2,18 @@ import { writable } from "svelte/store";
 
 const workouts = writable([
   {
+    id:1,
     name:"workout1",
     duration:"10",
     workoutType:"arms",
-    actions:[
-      {
-        name:"deadlift",
-        equipment:"barbel",
-        actionType:"time",
-        actionLength:"60",
-      },
-      {
-        name:"sqauts",
-        equipment:"barbel",
-        actionType:"time",
-        actionLength:"30",
-      },
-    ]
+    actionsNo:2
   },
   {
+    id:2,
     name:"workout2",
     duration:"15",
     workoutType:"arms",
-    actions:[
-      {
-        name:"deadlift",
-        equipment:"barbel",
-        actionType:"time",
-        actionLength:"60",
-      },
-      {
-        name:"sqauts",
-        equipment:"barbel",
-        actionType:"time",
-        actionLength:"30",
-      },
-    ]
+    actionsNo: 3
   }
 ]);
 

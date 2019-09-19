@@ -1,6 +1,6 @@
 <script>
-import NavLink from "./Navlink.svelte";
-import Button from './Button.svelte'
+  import NavLink from "./Navlink.svelte";
+  import Button from "./Button.svelte";
 </script>
 
 <style>
@@ -22,16 +22,21 @@ import Button from './Button.svelte'
   h1 {
     color: black;
     margin-top: 5px;
-    text-transform: uppercase
+    text-transform: uppercase;
   }
- 
+
+  .links {
+    margin-top: 1rem;
+  }
 </style>
 
 <header>
-  <h1><slot/></h1>
+  <h1>
+    <slot />
+  </h1>
   <div class="links">
-  
-   <NavLink to="/"><Button>Notes</Button></NavLink>
-   <NavLink to="/workouts"><Button>Workouts</Button></NavLink>
+    <Button href="/workouts">Workouts</Button>
+    <Button href="/">Notes</Button>
+
   </div>
 </header>

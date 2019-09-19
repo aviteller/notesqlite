@@ -13,7 +13,8 @@
   },
   "dependencies": {
     "sirv-cli": "^0.4.4",
-    "svelte-routing": "^1.4.0"
+    "svelte-routing": "^1.4.0",
+    "svelte-spa-router": "^1.2.0"
   },
   "scripts": {
     "build": "rollup -c",

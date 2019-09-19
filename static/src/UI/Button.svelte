@@ -4,6 +4,7 @@
   export let href = null;
   export let mode = null;
   export let color = null;
+  import {link} from 'svelte-spa-router'
 </script>
 
 <style>
@@ -97,7 +98,7 @@
 </style>
 
 {#if href}
-  <a {href}>
+  <a {href} use:link>
     <slot />
   </a>
 {:else}
