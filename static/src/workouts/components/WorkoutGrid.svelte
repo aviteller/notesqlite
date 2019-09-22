@@ -63,8 +63,8 @@
         id={workout.id}
         name={workout.name}
         duration={workout.duration}
-        workoutType={workout.workoutType}
-        actionsNo={workout.actionsNo}
+        workout_type={workout.workout_type}
+        actions_no={workout.actions_no}
         on:edit
         on:showdetails />
     </div>

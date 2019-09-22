@@ -1,9 +1,6 @@
 package models
 
 import (
-	"crypto/md5"
-	"encoding/hex"
-
 	u "../utils"
 	//blank
 	_ "github.com/mattn/go-sqlite3"
@@ -23,11 +20,6 @@ func (note *Note) Validate() (map[string]interface{}, bool) {
 	}
 
 	return u.Message(true, "success"), true
-}
-
-func Hasher(str string) string {
-	hash := md5.Sum([]byte(str))
-	return hex.EncodeToString(hash[:])
 }
 
 func (note *Note) Create() map[string]interface{} {

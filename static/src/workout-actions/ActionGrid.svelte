@@ -6,20 +6,14 @@
   import { onDestroy, createEventDispatcher } from "svelte";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import actions from "./actions-store.js";
 
   const dispatch = createEventDispatcher();
 
+  export let actions;
   export let workoutID;
 
   let editMode = false;
   let editedID = null;
-
-  let actionsArray = [];
-
-  const unsubscribe = actions.subscribe(items => {
-    actionsArray = items.filter(i => i.workoutID !== parseInt(workoutID));
-  });
 
   onDestroy(() => unsubscribe());
 
@@ -62,14 +56,14 @@
     <Button on:click={addAction}>Add Action</Button>
   </div>
   <section id="meetups">
-    {#if actionsArray.length > 0}
-      {#each actionsArray as action (action.id)}
+    {#if actions && actions.length > 0}
+      {#each actions as action (action.id)}
         <div transition:scale animate:flip={{ duration: 300 }}>
           <ActionItem
             id={action.id}
             name={action.name}
-            actionLength={action.actionLength}
-            actionType={action.actionType}
+            action_length={action.action_length}
+            action_type={action.action_type}
             equipment={action.equipment}
             workoutID={action.workoutID}
             on:edit={starEdit} />

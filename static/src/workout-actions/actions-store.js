@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 
 const actions = writable([
   {
-    id:1,
+    id: 1,
     workoutID: 1,
     name: "deadlift",
     equipment: "barbel",
@@ -10,7 +10,7 @@ const actions = writable([
     actionLength: "60"
   },
   {
-    id:2,
+    id: 2,
     workoutID: 1,
     name: "sqauts",
     equipment: "barbel",
@@ -19,15 +19,15 @@ const actions = writable([
   },
 
   {
-    id:3,
-    workoutID: 2,
+    id: 3,
+    workoutID: 1,
     name: "deadlift",
     equipment: "barbel",
     actionType: "reps",
     actionLength: "60"
   },
   {
-    id:4,
+    id: 4,
     workoutID: 2,
     name: "sqauts",
     equipment: "barbel",
@@ -35,7 +35,7 @@ const actions = writable([
     actionLength: "30"
   },
   {
-    id:5,
+    id: 5,
     workoutID: 2,
     name: "slaps",
     equipment: "barbel",
@@ -46,27 +46,27 @@ const actions = writable([
 
 const customActionsStore = {
   subscribe: actions.subscribe,
-  setActions: actionArray => {
+  setActions: (actionArray) => {
     actions.set(actionArray);
   },
-  addAction: actionData => {
+  addAction: (actionData) => {
     const newAction = {
       ...actionData
     };
-    actions.update(items => [...items, newAction]);
+    actions.update((items) => [...items, newAction]);
   },
   updateAction: (id, actionData) => {
-    actions.update(items => {
-      const actionIndex = items.findIndex(m => m.id === id);
+    actions.update((items) => {
+      const actionIndex = items.findIndex((m) => m.id === id);
       const updatedAction = { ...items[actionIndex], ...actionData };
       const updatedActions = [...items];
       updatedActions[actionIndex] = updatedAction;
       return updatedActions;
     });
   },
-  removeAction: id => {
-    actions.update(items => {
-      return items.filter(i => i.id !== id);
+  removeAction: (id) => {
+    actions.update((items) => {
+      return items.filter((i) => i.id !== id);
     });
   }
 };

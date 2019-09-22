@@ -21,31 +21,30 @@
   let isLoading = false;
   let error;
 
-  // fetch("http://localhost:9000/api/meetups")
-  //   .then(res => {
-  //     if (!res.ok) {
-  //       throw new Error("Issue fetching meetups");
-  //     }
-  //     return res.json();
-  //   })
-  //   .then(data => {
-  //     const loadedMeetups = [];
-  //     for (const key in data.data) {
-  //       loadedMeetups.push({
-  //         ...data.data[key],
-  //         id: key
-  //       });
-  //     }
-  //     //console.log(loadedMeetups)
+  fetch("http://localhost:9000/api/workouts")
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("Issue fetching workous");
+      }
+      return res.json();
+    })
+    .then(data => {
+      const loadedWorkouts = [];
+      for (const key in data.data) {
+        loadedWorkouts.push({
+          ...data.data[key],
+          // id: key
+        });
+      }
 
-  //     isLoading = false;
-  //     meetups.setMeetups(loadedMeetups);
-  //   })
-  //   .catch(err => {
-  //     error = err;
-  //     isLoading = false;
-  //     console.log(err);
-  //   });
+      isLoading = false;
+      workouts.setWorkouts(loadedWorkouts);
+    })
+    .catch(err => {
+      error = err;
+      isLoading = false;
+      console.log(err);
+    });
 
   const savedWorkout = () => {
     editMode = null;

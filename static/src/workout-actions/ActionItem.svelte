@@ -7,8 +7,8 @@
   import workouts from "./actions-store.js";
   export let name;
   export let id;
-  export let actionLength;
-  export let actionType;
+  export let action_length;
+  export let action_type;
   export let workoutID;
   export let equipment;
 
@@ -67,7 +67,7 @@
     <h1>
       {name}
     </h1>
-    <h2>{actionType}  - {actionLength}</h2>
+    <h2>{action_type}  - {action_length}</h2>
     <h2>{equipment}</h2>
     
     <!-- {#if duration}

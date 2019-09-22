@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
   import { createEventDispatcher } from "svelte";
   import TextInput from "../../UI/TextInput.svelte";
   import Button from "../../UI/Button.svelte";
@@ -192,4 +192,4 @@
       <Button on:click={deleteMeetup}>Delete</Button>
     {/if}
   </div>
-</Modal>
+</Modal> -->

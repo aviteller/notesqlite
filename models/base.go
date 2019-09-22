@@ -8,6 +8,20 @@ import (
 func InitTables() {
 	GetDB().Exec("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY autoincrement, title VARCHAR(255), message TEXT)")
 
+	//  id: 1,
+	// 	name: "workout1",
+	// 	duration: "10",
+	// 	workoutType: "arms",
+	// 	actionsNo: 2
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY autoincrement, name text, duration int DEFAULT 0, workout_type text, actions_no int DEFAULT 0)")
+	// id:1,
+	// workoutID: 1,
+	// name: "deadlift",
+	// equipment: "barbel",
+	// actionType: "time",
+	// actionLength: "60"
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS actions (id INTEGER PRIMARY KEY autoincrement, workout_id int, name text, equipment TEXT, action_type text, action_length int DEFAULT 0)")
+
 }
 
 //GetDB opens connection to sqlite db

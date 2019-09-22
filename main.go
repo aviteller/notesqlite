@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 
 	"./controllers"
@@ -11,7 +10,6 @@ import (
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/rs/cors"
-	"github.com/skratchdot/open-golang/open"
 )
 
 func main() {
@@ -31,6 +29,14 @@ func main() {
 	router.HandleFunc("/api/notes/{id}", controllers.DeleteNote).Methods("DELETE")
 	router.HandleFunc("/api/notes/{id}", controllers.UpdateNote).Methods("PUT")
 
+	router.HandleFunc("/api/workouts", controllers.CreateWorkout).Methods("POST")
+	router.HandleFunc("/api/workouts", controllers.GetWorkouts).Methods("GET")
+	router.HandleFunc("/api/workouts/{id}", controllers.GetWorkoutDetails).Methods("GET")
+	router.HandleFunc("/api/workouts/{id}", controllers.DeleteWorkout).Methods("DELETE")
+	router.HandleFunc("/api/workouts/{id}", controllers.UpdateWorkout).Methods("PUT")
+
+	router.HandleFunc("/api/actions", controllers.CreateAction).Methods("POST")
+
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 	//router.PathPrefix("/workouts").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 
@@ -39,10 +45,10 @@ func main() {
 		port = "8000"
 	}
 
-	err2 := open.Run("http://localhost:9000")
-	if err2 != nil {
-		log.Println(err2)
-	}
+	// err2 := open.Run("http://localhost:9000")
+	// if err2 != nil {
+	// 	log.Println(err2)
+	// }
 
 	err := http.ListenAndServe(":"+port, c.Handler(router))
 	if err != nil {

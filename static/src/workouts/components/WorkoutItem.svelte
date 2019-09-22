@@ -8,8 +8,8 @@
   export let name;
   export let id;
   export let duration;
-  export let workoutType;
-  export let actionsNo;
+  export let workout_type;
+  export let actions_no;
 
   let isLoading = false;
 
@@ -88,14 +88,14 @@
     {#if duration}
     <h2>Time: {duration}</h2>
     {/if}
-    {#if workoutType}
-    <p>Workout type: {workoutType}</p>
+    {#if workout_type}
+    <p>Workout type: {workout_type}</p>
     {/if}
   </header>
 
   <div class="content">
-  {#if actionsNo}
-    <p>No of actions: { actionsNo}</p>
+  {#if actions_no}
+    <p>No of actions: { actions_no}</p>
     {/if}
   </div>
   <footer>

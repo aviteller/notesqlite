@@ -7,22 +7,20 @@
   import actions from "./actions-store.js";
 
   export let id = null;
-  export let workoutID = null;
+  export let workoutID;
 
   let name = "";
-  let actionType = "";
-  let actionLength = "";
+  let action_type = "";
+  let action_length = "";
   let equipment = "";
-
 
   if (id) {
     const unsubscribe = actions.subscribe(items => {
       const selectedAction = items.find(i => i.id === id);
-      if(selectedAction){
-
+      if (selectedAction) {
         name = selectedAction.name;
-        actionType = selectedAction.actionType;
-        actionLength = selectedAction.actionLength;
+        action_type = selectedAction.action_type;
+        action_length = selectedAction.action_length;
         equipment = selectedAction.equipment;
       }
     });
@@ -31,9 +29,9 @@
   }
 
   $: nameValid = !isEmpty(name);
-  $: actionTypeValid = !isEmpty(actionType);
-  $: actionLengthValid = !isEmpty(actionLength);
-  $: formIsValid = nameValid && actionTypeValid && actionLengthValid;
+  $: action_typeValid = !isEmpty(action_type);
+  $: action_lengthValid = !isEmpty(action_length);
+  $: formIsValid = nameValid && action_typeValid && action_lengthValid;
 
   const dispatch = createEventDispatcher();
 
@@ -43,11 +41,13 @@
   // };
 
   const submitForm = () => {
+  
     const newAction = {
+      workout_id:parseInt(workoutID),
       name,
-      actionType,
-      actionLength,
-      equipment
+      equipment,
+      action_type,
+      action_length:parseInt(action_length),
     };
     if (id) {
       // fetch(`http://localhost:9000/api/meetups/${id}`, {
@@ -73,35 +73,30 @@
       actions.updateAction(id, newAction);
       cancel();
     } else {
-      // fetch("http://localhost:9000/api/meetups", {
-      //   method: "POST",
-      //   body: JSON.stringify(newMeetup),
-      //   headers: { "Content-Type": "application/json" }
-      // })
-      //   .then(res => {
-      //     if (!res.ok) {
-      //       throw new Error("Failed");
-      //     }
-      //     return res.json();
-      //   })
-      //   .then(data => {
-      //     if (!data.status) {
-      //       throw new Error(data.message);
-      //     }
-      //     meetups.addMeetup({
-      //       ...newMeetup,
-      //       isLiked: false,
-      //       id: data.meetup.ID
-      //     });
-      //     dispatch("addmeetup");
-
-      //   })
-      //   .catch(err => console.log(err));
-      actions.addAction({
-        ...newAction,
-        id: Math.random()
-      });
-      cancel();
+  
+      fetch("http://localhost:9000/api/actions", {
+        method: "POST",
+        body: JSON.stringify(newAction),
+        headers: { "Content-Type": "application/json" }
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Failed");
+          }
+          return res.json();
+        })
+        .then(data => {
+          if (!data.status) {
+            throw new Error(data.message);
+          }
+          console.log(data)
+          actions.addAction({
+            ...newAction,
+            id: data.action.id
+          });
+          cancel();
+        })
+        .catch(err => console.log(err));
     }
   };
   const deleteAction = () => {
@@ -135,19 +130,20 @@
       validityMessage="Please enter valid name"
       on:input={e => (name = e.target.value)} />
     <TextInput
-      id="actionType"
+      id="action_type"
       label="Type"
-      value={actionType}
-      valid={actionTypeValid}
-      validityMessage="Please enter valid actionType"
-      on:input={e => (actionType = e.target.value)} />
+      value={action_type}
+      valid={action_typeValid}
+      validityMessage="Please enter valid action_type"
+      on:input={e => (action_type = e.target.value)} />
     <TextInput
-      id="actionLength"
-      label="Address"
-      value={actionLength}
-      valid={actionLengthValid}
-      validityMessage="Please enter valid actionLength"
-      on:input={e => (actionLength = e.target.value)} />
+      id="action_length"
+      label="Action Length"
+      value={action_length}
+      valid={action_lengthValid}
+      type="number"
+      validityMessage="Please enter valid action_length"
+      on:input={e => (action_length = e.target.value)} />
 
     <TextInput
       id="equipment"

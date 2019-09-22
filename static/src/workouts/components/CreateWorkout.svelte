@@ -7,9 +7,9 @@
   import workouts from "../workouts-store.js";
   let name = "";
   let duration = "";
-  let workoutType = "";
+  let workout_type = "";
   const dispatch = createEventDispatcher();
-    const cancel = () => dispatch("cancel");
+  const cancel = () => dispatch("cancel");
 
   $: nameValid = !isEmpty(name);
   $: formIsValid = nameValid;
@@ -17,16 +17,38 @@
   const submitForm = () => {
     let newWorkout = {
       name,
-      duration,
-      workoutType
+      duration: parseInt(duration),
+      workout_type
     };
 
-    workouts.addWorkout({
-      ...newWorkout,
+    console.log(newWorkout);
 
-      id: Math.random()
-    });
-    dispatch('addworkout')
+    fetch("http://localhost:9000/api/workouts", {
+      method: "POST",
+      body: JSON.stringify(newWorkout),
+      headers: { "Content-Type": "application/json" }
+    })
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Failed");
+        }
+        return res.json();
+      })
+      .then(data => {
+        if (!data.status) {
+          throw new Error(data.message);
+        }
+        workouts.addWorkout({ ...newWorkout, id: data.workout.id });
+        dispatch("addworkout");
+      })
+      .catch(err => console.log(err));
+
+    // workouts.addWorkout({
+    //   ...newWorkout,
+
+    //   id: Math.random()
+    // });
+    // dispatch('addworkout')
   };
 </script>
 
@@ -43,15 +65,15 @@
     id="duration"
     label="Duration"
     value={duration}
-
+    type="number"
     on:input={e => (duration = e.target.value)} />
-  
+
   <TextInput
-    id="workoutType"
+    id="workout_type"
     label="Workout Type"
-    value={workoutType}
-    on:input={e => (workoutType = e.target.value)} />
-    <div slot="footer">
+    value={workout_type}
+    on:input={e => (workout_type = e.target.value)} />
+  <div slot="footer">
     <Button on:click={cancel}>Cancel</Button>
     <Button on:click={submitForm} disabled={!formIsValid}>Save</Button>
   </div>
