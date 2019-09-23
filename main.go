@@ -36,6 +36,9 @@ func main() {
 	router.HandleFunc("/api/workouts/{id}", controllers.UpdateWorkout).Methods("PUT")
 
 	router.HandleFunc("/api/actions", controllers.CreateAction).Methods("POST")
+	router.HandleFunc("/api/workouts/actions/{workoutid}", controllers.GetActionsForWorkout).Methods("GET")
+	router.HandleFunc("/api/actions/{id}", controllers.DeleteAction).Methods("DELETE")
+	router.HandleFunc("/api/actions/{id}", controllers.UpdateAction).Methods("PUT")
 
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 	//router.PathPrefix("/workouts").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
@@ -53,6 +56,8 @@ func main() {
 	err := http.ListenAndServe(":"+port, c.Handler(router))
 	if err != nil {
 		fmt.Println(err)
+	} else {
+		fmt.Println("server running")
 	}
 
 }

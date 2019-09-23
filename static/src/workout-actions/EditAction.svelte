@@ -20,9 +20,10 @@
       if (selectedAction) {
         name = selectedAction.name;
         action_type = selectedAction.action_type;
-        action_length = selectedAction.action_length;
+        action_length = selectedAction.action_length.toString();
         equipment = selectedAction.equipment;
       }
+      console.log(name, action_type, action_length, equipment)
     });
 
     unsubscribe();
@@ -35,11 +36,6 @@
 
   const dispatch = createEventDispatcher();
 
-  //   const submitForm = e => {
-
-  //   editMode = null;
-  // };
-
   const submitForm = () => {
   
     const newAction = {
@@ -50,28 +46,26 @@
       action_length:parseInt(action_length),
     };
     if (id) {
-      // fetch(`http://localhost:9000/api/meetups/${id}`, {
-      //   method: "PUT",
-      //   body: JSON.stringify(newMeetup),
-      //   headers: { "Content-Type": "application/json" }
-      // })
-      //   .then(res => {
-      //     if (!res.ok) {
-      //       throw new Error("Failed");
-      //     }
-      //     return res.json();
-      //   })
-      //   .then(data => {
-      //     if (!data.status) {
-      //       throw new Error(data.message);
-      //     }
-      //     meetups.updateMeetup(id, newMeetup);
-      //     dispatch("addmeetup");
-      //     clearForm();
-      //   })
-      //   .catch(err => console.log(err));
-      actions.updateAction(id, newAction);
-      cancel();
+      fetch(`http://localhost:9000/api/actions/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(newAction),
+        headers: { "Content-Type": "application/json" }
+      })
+        .then(res => {
+          if (!res.ok) {
+            throw new Error("Failed");
+          }
+          return res.json();
+        })
+        .then(data => {
+          if (!data.status) {
+            throw new Error(data.message);
+          }
+             actions.updateAction(id, newAction);
+            cancel();
+        })
+        .catch(err => console.log(err));
+
     } else {
   
       fetch("http://localhost:9000/api/actions", {

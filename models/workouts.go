@@ -47,7 +47,6 @@ func GetWorkouts() []Workout {
 	for rows.Next() {
 		var workout Workout
 		_ = rows.Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo)
-		fmt.Println(workout)
 		workouts = append(workouts, workout)
 	}
 
@@ -67,19 +66,15 @@ func GetWorkoutDetails(id string) Workout {
 		panic(err.Error())
 	}
 
-	actions := GetActionsForWorkout(id)
-
-	workout.Actions = actions
-	// for rows.Next() {
-	// 	var workout Workout
-	// 	_ = rows.Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo)
-	// 	fmt.Println(workout)
-	// 	workouts = append(workouts, workout)
-	// }
-
-	// rows.Close() //good habit to close
-
 	return workout
+}
+
+func UpdateActionNos(id int, change string) {
+	s := fmt.Sprintf("UPDATE `workouts` SET `actions_no` = `actions_no` %s   WHERE id = %v", change, id)
+	//database := GetDB()
+	GetDB().Exec(s)
+	// statement, _ := database.Prepare("UPDATE `workouts` SET `actions_no` = `actions_no` ?   WHERE id = ?")
+	// statement.Exec(change, id)
 }
 
 func DeleteWorkout(id string) map[string]interface{} {

@@ -27,7 +27,7 @@
       duration = data.data.duration;
       workout_type = data.data.workout_type;
       actions_no = data.data.actions_no;
-      actions=data.data.Actions
+      //actions=data.data.Actions
     })
     .catch(err => {
       error = err;
@@ -149,16 +149,10 @@
     </div>
     <div class="actions">
 
-      <ActionGrid actions={actions} workoutID={params.id}/>
-      {#if actions_no > 0}
-        <!-- {#each actions as action} {action.name}{/each} -->
-      {:else}
-        <h1>Add new action</h1>
-      {/if}
+      <ActionGrid workoutID={params.id}/>
+  
     </div>
-    <!-- <h2>{selectedMeetup.subtitle} - {selectedMeetup.address}</h2>
-    <p>{selectedMeetup.description}</p>
-    <Button href="mailto:{selectedMeetup.contactEmail}">Contact</Button> -->
+
 
   </div>
 </section>

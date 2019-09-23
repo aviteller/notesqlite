@@ -13,20 +13,20 @@ func InitTables() {
 	// 	duration: "10",
 	// 	workoutType: "arms",
 	// 	actionsNo: 2
-	GetDB().Exec("CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY autoincrement, name text, duration int DEFAULT 0, workout_type text, actions_no int DEFAULT 0)")
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS workouts (id INTEGER PRIMARY KEY autoincrement, name text, duration int DEFAULT 0, workout_type text, actions_no int DEFAULT 0, pos int DEFAULT 0)")
 	// id:1,
 	// workoutID: 1,
 	// name: "deadlift",
 	// equipment: "barbel",
 	// actionType: "time",
 	// actionLength: "60"
-	GetDB().Exec("CREATE TABLE IF NOT EXISTS actions (id INTEGER PRIMARY KEY autoincrement, workout_id int, name text, equipment TEXT, action_type text, action_length int DEFAULT 0)")
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS actions (id INTEGER PRIMARY KEY autoincrement, workout_id int, name text, equipment TEXT, action_type text, action_length int DEFAULT 0 , pos int DEFAULT 0)")
 
 }
 
 //GetDB opens connection to sqlite db
 func GetDB() *sql.DB {
-	database, err := sql.Open("sqlite3", "./dbs/notes.db")
+	database, err := sql.Open("sqlite3", "./dbs/notes.db:databaselocked.sqlite?cache=shared&mode=rwc")
 	if err != nil {
 		fmt.Println(err)
 	}
