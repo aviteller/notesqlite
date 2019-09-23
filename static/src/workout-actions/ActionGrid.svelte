@@ -70,7 +70,7 @@
 </style>
 
 {#if editMode}
-  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} />
+  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} on:add on:remove/>
 {:else}
   {#if isLoading}
     <h1>...LOADING</h1>

@@ -12,7 +12,7 @@ type Workout struct {
 	Duration    int    `json:"duration"`
 	WorkoutType string `json:"workout_type"`
 	ActionsNo   int    `json:"actions_no"`
-	Actions     []Action
+	Pos         int    `json:"pos"`
 }
 
 func (workout *Workout) Validate() (map[string]interface{}, bool) {
@@ -46,7 +46,7 @@ func GetWorkouts() []Workout {
 	rows, _ := database.Query("SELECT * FROM workouts")
 	for rows.Next() {
 		var workout Workout
-		_ = rows.Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo)
+		_ = rows.Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo, &workout.Pos)
 		workouts = append(workouts, workout)
 	}
 
@@ -60,7 +60,7 @@ func GetWorkoutDetails(id string) Workout {
 
 	var workout Workout
 	database := GetDB()
-	err := database.QueryRow("SELECT * FROM workouts WHERE id = ?", id).Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo)
+	err := database.QueryRow("SELECT * FROM workouts WHERE id = ?", id).Scan(&workout.ID, &workout.Name, &workout.Duration, &workout.WorkoutType, &workout.ActionsNo, &workout.Pos)
 
 	if err != nil {
 		panic(err.Error())
@@ -80,9 +80,10 @@ func UpdateActionNos(id int, change string) {
 func DeleteWorkout(id string) map[string]interface{} {
 
 	database := GetDB()
-	stmt, _ := database.Prepare("delete from workouts where id=?")
-
+	stmt, _ := database.Prepare("delete from actions where workout_id=?")
 	stmt.Exec(id)
+	stmt2, _ := database.Prepare("delete from workouts where id=?")
+	stmt2.Exec(id)
 
 	res2 := u.Message(true, "success")
 

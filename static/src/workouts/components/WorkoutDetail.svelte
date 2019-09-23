@@ -46,6 +46,9 @@
 
   // onDestroy(() => unsubscribe());
 
+  const addActionNo = () => actions_no = actions_no +1
+  const removeActionNo = () => actions_no = actions_no -1
+
   const submitForm = () => {
     const newWorkout = {
       name,
@@ -75,8 +78,14 @@
   };
 
   const deleteWorkout = () => {
-    workouts.removeWorkout(parseInt(params.id));
-    pop();
+    fetch(`http://localhost:9000/api/workouts/${params.id}`, {
+      method: "DELETE"
+    })
+      .then(res => {
+        workouts.removeWorkout(parseInt(params.id));
+        pop();
+      })
+      .catch(err => console.log(err));
   };
 
   const dispatch = createEventDispatcher();
@@ -149,10 +158,9 @@
     </div>
     <div class="actions">
 
-      <ActionGrid workoutID={params.id}/>
-  
-    </div>
+      <ActionGrid workoutID={params.id} on:add={addActionNo} on:remove={removeActionNo} />
 
+    </div>
 
   </div>
 </section>

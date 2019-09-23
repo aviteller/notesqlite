@@ -23,7 +23,7 @@
         action_length = selectedAction.action_length.toString();
         equipment = selectedAction.equipment;
       }
-      console.log(name, action_type, action_length, equipment)
+      console.log(name, action_type, action_length, equipment);
     });
 
     unsubscribe();
@@ -37,13 +37,12 @@
   const dispatch = createEventDispatcher();
 
   const submitForm = () => {
-  
     const newAction = {
-      workout_id:parseInt(workoutID),
+      workout_id: parseInt(workoutID),
       name,
       equipment,
       action_type,
-      action_length:parseInt(action_length),
+      action_length: parseInt(action_length)
     };
     if (id) {
       fetch(`http://localhost:9000/api/actions/${id}`, {
@@ -61,13 +60,11 @@
           if (!data.status) {
             throw new Error(data.message);
           }
-             actions.updateAction(id, newAction);
-            cancel();
+          actions.updateAction(id, newAction);
+          cancel();
         })
         .catch(err => console.log(err));
-
     } else {
-  
       fetch("http://localhost:9000/api/actions", {
         method: "POST",
         body: JSON.stringify(newAction),
@@ -83,27 +80,26 @@
           if (!data.status) {
             throw new Error(data.message);
           }
-          console.log(data)
           actions.addAction({
             ...newAction,
             id: data.action.id
           });
+          dispatch("add")
           cancel();
         })
         .catch(err => console.log(err));
     }
   };
   const deleteAction = () => {
-    actions.removeAction(id);
-    cancel();
-    // fetch(`http://localhost:9000/api/meetups/${id}`, {
-    //   method: "DELETE"
-    // })
-    //   .then(res => {
-    //     meetups.removeMeetup(id);
-    //     cancel();
-    //   })
-    //   .catch(err => console.log(err));
+    fetch(`http://localhost:9000/api/actions/${id}`, {
+      method: "DELETE"
+    })
+      .then(res => {
+        actions.removeAction(id);
+        dispatch("remove")
+        cancel();
+      })
+      .catch(err => console.log(err));
   };
   const cancel = () => dispatch("cancel");
 </script>

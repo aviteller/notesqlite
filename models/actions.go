@@ -13,6 +13,7 @@ type Action struct {
 	Equipment    string `json:"equipment"`
 	ActionType   string `json:"action_type"`
 	ActionLength int    `json:"action_length"`
+	Pos          int    `json:"pos"`
 }
 
 func (action *Action) Validate() (map[string]interface{}, bool) {
@@ -27,16 +28,19 @@ func (action *Action) Validate() (map[string]interface{}, bool) {
 func GetActionsForWorkout(id string) []Action {
 	var actions []Action
 	database := GetDB()
-	// fmt.Println(id)
+
 	rows, _ := database.Query("SELECT * FROM actions WHERE workout_id = ?", id)
-	fmt.Println(rows)
+
 	for rows.Next() {
 		var action Action
-		_ = rows.Scan(&action.ID, &action.WorkoutID, &action.Name, &action.Equipment, &action.ActionType, &action.ActionLength)
+		err := rows.Scan(&action.ID, &action.WorkoutID, &action.Name, &action.Equipment, &action.ActionType, &action.ActionLength, &action.Pos)
+		if err != nil {
+			fmt.Println(err)
+		}
 		fmt.Println(action)
 		actions = append(actions, action)
 	}
-
+	rows.Close() //good habit to close
 	return actions
 }
 
@@ -44,7 +48,7 @@ func (action *Action) Create() map[string]interface{} {
 	if res, ok := action.Validate(); !ok {
 		return res
 	}
-	// fmt.Printf("%+v\n", action)
+	fmt.Println(action.WorkoutID, action.Name, action.Equipment, action.ActionType, action.ActionLength)
 	database := GetDB()
 	statement, _ := database.Prepare("INSERT INTO `actions` (`workout_id`, `name`,`equipment`,`action_type`,`action_length`) VALUES (?,?,?,?,?)")
 	result, err := statement.Exec(action.WorkoutID, action.Name, action.Equipment, action.ActionType, action.ActionLength)
@@ -77,12 +81,12 @@ func getWorkID(id string) int {
 
 func DeleteAction(id string) map[string]interface{} {
 
+	workoutID := getWorkID(id)
+	UpdateActionNos(workoutID, "-1")
 	database := GetDB()
 	stmt, _ := database.Prepare("delete from actions where id=?")
 
 	stmt.Exec(id)
-	workoutID := getWorkID(id)
-	UpdateActionNos(workoutID, "-1")
 	res2 := u.Message(true, "success")
 
 	return res2
@@ -93,8 +97,14 @@ func (action *Action) UpdateAction(id string) map[string]interface{} {
 		return res
 	}
 	database := GetDB()
-	statement, _ := database.Prepare("UPDATE `actions` SET `equipment`= ?, `action_type`=? , `action_length`=? WHERE id =?")
-	result, _ := statement.Exec(action.Name, action.Equipment, action.ActionType, action.ActionLength, id)
+	statement, err := database.Prepare("UPDATE `actions` SET `name`= ?, `equipment`= ?, `action_type`=?, `action_length`=? WHERE id =?")
+	if err != nil {
+		fmt.Println(err)
+	}
+	result, err := statement.Exec(action.Name, action.Equipment, action.ActionType, action.ActionLength, id)
+	if err != nil {
+		fmt.Println(err)
+	}
 
 	res := u.Message(true, "success")
 	lastid, _ := result.LastInsertId()

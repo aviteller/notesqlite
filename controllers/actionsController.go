@@ -28,9 +28,9 @@ var GetActionsForWorkout = func(w http.ResponseWriter, r *http.Request) {
 
 	params := mux.Vars(r)
 
-	actionid := params["actionid"]
+	workoutid := params["workoutid"]
 
-	data := models.GetActionsForWorkout(actionid)
+	data := models.GetActionsForWorkout(workoutid)
 
 	res := u.Message(true, "success")
 
