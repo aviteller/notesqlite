@@ -2,10 +2,10 @@
   import WorkoutItem from "./WorkoutItem.svelte";
   //import MeetupFilter from "./MeetupFilter.svelte";
   import Button from "../../UI/Button.svelte";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-
+  import SortableList from "svelte-sortable-list";
   const dispatch = createEventDispatcher();
 
   export let workouts;
@@ -17,6 +17,11 @@
   //     ? meetups.filter(m => m.isLiked)
   //     : meetups.filter(m => !m.isLiked)
   //   : meetups;
+
+  const sortList = ev => {
+    console.log(ev.detail)
+    workouts = ev.detail;
+  };
 
   const setFilter = e => {
     filter = e.detail;
@@ -56,8 +61,19 @@
 {#if workouts.length === 0}
   <p id="no-meetups">No meetups found</p>
 {/if}
+
 <section id="meetups">
-  {#each workouts as workout (workout.id)}
+  <SortableList list={workouts} key="id" on:sort={sortList} let:item>
+    <WorkoutItem
+      id={item.id}
+      name={item.name}
+      duration={item.duration}
+      workout_type={item.workout_type}
+      actions_no={item.actions_no}
+      on:edit
+      on:showdetails />
+  </SortableList>
+  <!-- {#each workouts as workout (workout.id)}
     <div transition:scale animate:flip={{ duration: 300 }}>
       <WorkoutItem
         id={workout.id}
@@ -68,5 +84,5 @@
         on:edit
         on:showdetails />
     </div>
-  {/each}
+  {/each} -->
 </section>

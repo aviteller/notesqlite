@@ -1,10 +1,10 @@
 <script>
-  import Button from "../UI/Button.svelte";
-  import Badge from "../UI/Badge.svelte";
-  import LoadingSpinner from "../UI/LoadingSpinner.svelte";
+  import Button from "../../UI/Button.svelte";
+  import Badge from "../../UI/Badge.svelte";
+  import LoadingSpinner from "../../UI/LoadingSpinner.svelte";
   import { createEventDispatcher } from "svelte";
 
-  import workouts from "./actions-store.js";
+  import workouts from "../actions-store.js";
   export let name;
   export let id;
   export let action_length;

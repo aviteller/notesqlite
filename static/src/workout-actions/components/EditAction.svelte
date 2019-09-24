@@ -1,10 +1,10 @@
 <script>
   import { createEventDispatcher } from "svelte";
-  import TextInput from "../UI/TextInput.svelte";
-  import Button from "../UI/Button.svelte";
-  import Modal from "../UI/Modal.svelte";
+  import TextInput from "../UI/../TextInput.svelte";
+  import Button from "../../UI/Button.svelte";
+  import Modal from "../../UI/Modal.svelte";
   import { isEmpty, isValidEmail } from "../helpers/validation";
-  import actions from "./actions-store.js";
+  import actions from "../actions-store.js";
 
   export let id = null;
   export let workoutID;

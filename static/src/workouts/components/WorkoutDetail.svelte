@@ -3,7 +3,7 @@
   import { pop } from "svelte-spa-router";
   import Button from "../../UI/Button.svelte";
   import TextInput from "../../UI/TextInput.svelte";
-  import ActionGrid from "../../workout-actions/ActionGrid.svelte";
+  import Actions from "../../workout-actions/Actions.svelte";
   import workouts from "../workouts-store.js";
   import { isEmpty, isValidEmail } from "../../helpers/validation";
   export let params;
@@ -34,17 +34,7 @@
       isLoading = false;
       console.log(err);
     });
-  // const unsubscribe = workouts.subscribe(items => {
-  //   selectedWorkout = items.find(i => i.id === parseInt(params.id));
-  //   name = selectedWorkout.name;
-  //   duration = selectedWorkout.duration;
-  //   workout_type = selectedWorkout.workout_type;
-  //   actions_no = selectedWorkout.actions_no;
-  // });
 
-  //   unsubscribe();
-
-  // onDestroy(() => unsubscribe());
 
   const addActionNo = () => actions_no = actions_no +1
   const removeActionNo = () => actions_no = actions_no -1
@@ -158,7 +148,7 @@
     </div>
     <div class="actions">
 
-      <ActionGrid workoutID={params.id} on:add={addActionNo} on:remove={removeActionNo} />
+      <Actions workoutID={params.id} on:add={addActionNo} on:remove={removeActionNo} />
 
     </div>
 

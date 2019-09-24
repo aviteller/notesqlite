@@ -1,12 +1,12 @@
 <script>
   import ActionItem from "./ActionItem.svelte";
   import EditAction from "./EditAction.svelte";
-  //import MeetupFilter from "./MeetupFilter.svelte";
-  import Button from "../UI/Button.svelte";
-  import { onDestroy, createEventDispatcher } from "svelte";
+  import Button from "../../UI/Button.svelte";
+  import { onDestroy, createEventDispatcher, onMount } from "svelte";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import actions from "./actions-store";
+  import actions from "../actions-store";
+  import SortableList from "svelte-sortable-list";
 
   const dispatch = createEventDispatcher();
 
@@ -46,6 +46,10 @@
 
   const addAction = () => (editMode = true);
   const stopEdit = () => (editMode = false);
+
+  const sortList = ev => {
+    actions = ev.detail;
+  };
 </script>
 
 <style>
@@ -70,7 +74,7 @@
 </style>
 
 {#if editMode}
-  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} on:add on:remove/>
+  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} on:add on:remove />
 {:else}
   {#if isLoading}
     <h1>...LOADING</h1>
@@ -81,7 +85,18 @@
     </div>
     <section id="meetups">
       {#if actions && $actions.length > 0}
-        {#each $actions as action (action.id)}
+        <SortableList list={actions} key="id" on:sort={sortList} let:item>
+          <ActionItem
+            id={item.id}
+            name={item.name}
+            action_length={item.action_length}
+            action_type={item.action_type}
+            equipment={item.equipment}
+            workoutID={item.workoutID}
+            on:edit={starEdit} />
+
+        </SortableList>
+        <!-- {#each $actions as action (action.id)}
           <div transition:scale animate:flip={{ duration: 300 }}>
             <ActionItem
               id={action.id}
@@ -92,7 +107,7 @@
               workoutID={action.workoutID}
               on:edit={starEdit} />
           </div>
-        {/each}
+        {/each} -->
       {:else}
         <h1>Add actions</h1>
       {/if}
