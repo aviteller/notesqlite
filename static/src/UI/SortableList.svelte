@@ -27,6 +27,7 @@
   const getDraggedParent = node =>
     (node.dataset.index && node.dataset) || getDraggedParent(node.parentNode);
   const start = ev => {
+    
     ev.dataTransfer.setData("source", ev.target.dataset.index);
   };
   const over = ev => {
@@ -64,18 +65,11 @@
   // PROPS
   export let list;
   export let key;
- 
+
 </script>
 
 <style>
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  li {
-    border: 2px dotted transparent;
-    transition: border 0.1s linear;
-  }
+
   .over {
     border-color: rgba(48, 12, 200, 0.2);
   }

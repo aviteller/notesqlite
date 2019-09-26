@@ -30,7 +30,17 @@
     grid-gap: 1rem;
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 512px) {
+    #meetups {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 800px) {
+    #meetups {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1060px) {
     #meetups {
       grid-template-columns: repeat(4, 1fr);
     }
