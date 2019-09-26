@@ -63,9 +63,16 @@ func SwapActionPos(firstID string, secondID string) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 	firstPos := strconv.Itoa(firstItem.Pos)
 	secondPos := strconv.Itoa(secondItem.Pos)
-	fmt.Println(firstItem.Pos, firstPos)
+	fmt.Println(firstPos, secondPos)
+	// hack if pos happens to end up the same somehow give the second pos as
+	if firstPos == secondPos {
+		var newPos int
+		err = database.QueryRow("SELECT MAX(pos) FROM actions WHERE workout_id = ?", secondItem.WorkoutID).Scan(&newPos)
+		secondPos = strconv.Itoa(newPos + 1)
+	}
 
 	res, err1 := database.Prepare("UPDATE `actions` SET pos = ? WHERE id = ?")
 	res.Exec(secondPos, firstItem.ID)

@@ -12,27 +12,14 @@
   const dispatch = createEventDispatcher();
 
   const sortList = ev => {
- 
     actions = ev.detail;
   };
 
-  const saveSort = (e) => {
-    fetch(`http://localhost:9000/api/actions/swap/${e.detail[0]}/${e.detail[1]}`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Issue fetching workous");
-      }
-      return res.json();
-    })
-    .then(data => {
-      console.log(data)
-    })
-    .catch(err => {
-      isLoading = false;
-      console.log(err);
-    });
-  } 
-
+  const saveSort = e => {
+    fetch(
+      `http://localhost:9000/api/actions/swap/${e.detail[0]}/${e.detail[1]}`
+    ).catch(err => console.log(err));
+  };
 </script>
 
 <style>
@@ -48,13 +35,16 @@
       grid-template-columns: repeat(4, 1fr);
     }
   }
-
 </style>
-
 
 <section id="meetups">
   {#if actions && actions.length > 0}
-    <SortableList list={actions} key="id" on:sort={sortList} let:item on:savesort={saveSort}>
+    <SortableList
+      list={actions}
+      key="id"
+      on:sort={sortList}
+      let:item
+      on:savesort={saveSort}>
       <ActionItem
         id={item.id}
         name={item.name}

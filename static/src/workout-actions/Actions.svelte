@@ -32,11 +32,13 @@
       console.log(err);
     });
   const starEdit = e => {
-    console.log(e.detail)
     editMode = true;
     editedID = e.detail;
   };
-  const addAction = () => (editMode = true);
+  const addAction = () => {
+    editMode = true;
+    editedID = null;
+  };
   const stopEdit = () => (editMode = false);
 </script>
 
