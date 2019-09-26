@@ -1,7 +1,5 @@
 <script>
   import Button from "../../UI/Button.svelte";
-  import Badge from "../../UI/Badge.svelte";
-  import LoadingSpinner from "../../UI/LoadingSpinner.svelte";
   import { createEventDispatcher } from "svelte";
 
   import workouts from "../actions-store.js";
@@ -16,21 +14,6 @@
 
   const dispatch = createEventDispatcher();
 
-  // const toggleLike = () => {
-  //   isLoading = true;
-  //   fetch(`http://localhost:9000/api/meetups/togglelike/${id}`, {
-  //     method: "PUT"
-  //   })
-  //     .then(res => {
-  //       isLoading = false;
-
-  //       meetups.toggleLike(id);
-  //     })
-  //     .catch(err => {
-  //       isLoading = false;
-  //       console.log(err);
-  //     });
-  // };
 </script>
 
 <style>
@@ -44,7 +27,6 @@
 
   header,
   footer {
-
     text-align: center;
   }
 
@@ -59,30 +41,15 @@
     color: #808080;
     margin: 0.5rem 0;
   }
-
 </style>
 
 <article>
   <header>
-    <h1>
-      {name}
-    </h1>
-    <h2>{action_type}  - {action_length}</h2>
+    <h1>{name}</h1>
+    <h2>{action_type} - {action_length}</h2>
     <h2>{equipment}</h2>
-    
-    <!-- {#if duration}
-    <h2>Time: {duration}</h2>
-    {/if}
-    {#if workoutType}
-    <p>Workout type: {workoutType}</p>
-    {/if} -->
   </header>
-
- 
   <footer>
-  
     <Button color="success" on:click={() => dispatch('edit', id)}>Edit</Button>
-    <!-- <Button on:click={() => dispatch('showdetails', id)}>Show Details</Button> -->
-
   </footer>
 </article>

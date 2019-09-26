@@ -5,17 +5,19 @@
   import { onDestroy, createEventDispatcher, onMount } from "svelte";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import actions from "../actions-store";
-  import SortableList from "svelte-sortable-list";
+  import SortableList from "../../UI/SortableList.svelte";
+
+  export let actions;
 
   const dispatch = createEventDispatcher();
 
-  export let workoutID;
-  let isLoading = true;
-  let editMode = false;
-  let editedID = null;
+  const sortList = ev => {
+ 
+    actions = ev.detail;
+  };
 
-  fetch(`http://localhost:9000/api/workouts/actions/${workoutID}`)
+  const saveSort = (e) => {
+    fetch(`http://localhost:9000/api/actions/swap/${e.detail[0]}/${e.detail[1]}`)
     .then(res => {
       if (!res.ok) {
         throw new Error("Issue fetching workous");
@@ -23,33 +25,14 @@
       return res.json();
     })
     .then(data => {
-      const loadedActions = [];
-      for (const key in data.data) {
-        loadedActions.push({
-          ...data.data[key]
-          // id: key
-        });
-      }
-
-      isLoading = false;
-      actions.setActions(loadedActions);
+      console.log(data)
     })
     .catch(err => {
       isLoading = false;
       console.log(err);
     });
+  } 
 
-  const starEdit = e => {
-    editMode = true;
-    editedID = e.detail;
-  };
-
-  const addAction = () => (editMode = true);
-  const stopEdit = () => (editMode = false);
-
-  const sortList = ev => {
-    actions = ev.detail;
-  };
 </script>
 
 <style>
@@ -66,37 +49,22 @@
     }
   }
 
-  .action-controls {
-    display: flex;
-    color: #6b6b6b;
-    justify-content: space-around;
-  }
 </style>
 
-{#if editMode}
-  <EditAction id={editedID} {workoutID} on:cancel={stopEdit} on:add on:remove />
-{:else}
-  {#if isLoading}
-    <h1>...LOADING</h1>
-  {:else}
-    <div class="action-controls">
-      <h1>Actions</h1>
-      <Button on:click={addAction}>Add Action</Button>
-    </div>
-    <section id="meetups">
-      {#if actions && $actions.length > 0}
-        <SortableList list={actions} key="id" on:sort={sortList} let:item>
-          <ActionItem
-            id={item.id}
-            name={item.name}
-            action_length={item.action_length}
-            action_type={item.action_type}
-            equipment={item.equipment}
-            workoutID={item.workoutID}
-            on:edit={starEdit} />
 
-        </SortableList>
-        <!-- {#each $actions as action (action.id)}
+<section id="meetups">
+  {#if actions && actions.length > 0}
+    <SortableList list={actions} key="id" on:sort={sortList} let:item on:savesort={saveSort}>
+      <ActionItem
+        id={item.id}
+        name={item.name}
+        action_length={item.action_length}
+        action_type={item.action_type}
+        equipment={item.equipment}
+        workoutID={item.workoutID}
+        on:edit />
+    </SortableList>
+    <!-- {#each $actions as action (action.id)}
           <div transition:scale animate:flip={{ duration: 300 }}>
             <ActionItem
               id={action.id}
@@ -108,9 +76,7 @@
               on:edit={starEdit} />
           </div>
         {/each} -->
-      {:else}
-        <h1>Add actions</h1>
-      {/if}
-    </section>
+  {:else}
+    <h1>Add actions</h1>
   {/if}
-{/if}
+</section>

@@ -1,31 +1,18 @@
 <script>
   import WorkoutItem from "./WorkoutItem.svelte";
-  //import MeetupFilter from "./MeetupFilter.svelte";
   import Button from "../../UI/Button.svelte";
   import { createEventDispatcher, onMount } from "svelte";
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-  import SortableList from "svelte-sortable-list";
-  const dispatch = createEventDispatcher();
-
+  import SortableList from "../../UI/SortableList.svelte";
   export let workouts;
 
-  let filter = false;
-
-  // $: filteredMeetups = filter
-  //   ? filter === 1
-  //     ? meetups.filter(m => m.isLiked)
-  //     : meetups.filter(m => !m.isLiked)
-  //   : meetups;
+  const dispatch = createEventDispatcher();
 
   const sortList = ev => {
-    console.log(ev.detail)
     workouts = ev.detail;
   };
 
-  const setFilter = e => {
-    filter = e.detail;
-  };
 </script>
 
 <style>
@@ -54,7 +41,6 @@
 </style>
 
 <section id="meetup-controls">
-  <!-- <MeetupFilter on:select={setFilter} /> -->
   <Button on:click={() => dispatch('add')}>New Meetup</Button>
 
 </section>

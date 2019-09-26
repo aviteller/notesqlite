@@ -37,6 +37,7 @@ func main() {
 
 	router.HandleFunc("/api/actions", controllers.CreateAction).Methods("POST")
 	router.HandleFunc("/api/workouts/actions/{workoutid}", controllers.GetActionsForWorkout).Methods("GET")
+	router.HandleFunc("/api/actions/swap/{firstID}/{secondID}", controllers.SwapActionPos).Methods("GET")
 	router.HandleFunc("/api/actions/{id}", controllers.DeleteAction).Methods("DELETE")
 	router.HandleFunc("/api/actions/{id}", controllers.UpdateAction).Methods("PUT")
 

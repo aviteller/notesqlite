@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"strconv"
 
 	u "../utils"
 )
@@ -29,7 +30,7 @@ func GetActionsForWorkout(id string) []Action {
 	var actions []Action
 	database := GetDB()
 
-	rows, _ := database.Query("SELECT * FROM actions WHERE workout_id = ?", id)
+	rows, _ := database.Query("SELECT * FROM actions WHERE workout_id = ? ORDER BY `pos` ASC ", id)
 
 	for rows.Next() {
 		var action Action
@@ -37,21 +38,58 @@ func GetActionsForWorkout(id string) []Action {
 		if err != nil {
 			fmt.Println(err)
 		}
-		fmt.Println(action)
+
 		actions = append(actions, action)
 	}
 	rows.Close() //good habit to close
 	return actions
 }
 
+func SwapActionPos(firstID string, secondID string) {
+
+	var firstItem Action
+	var secondItem Action
+
+	database := GetDB()
+
+	err := database.QueryRow("SELECT * FROM actions WHERE id = ?", firstID).Scan(&firstItem.ID, &firstItem.WorkoutID, &firstItem.Name, &firstItem.Equipment, &firstItem.ActionType, &firstItem.ActionLength, &firstItem.Pos)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	err = database.QueryRow("SELECT * FROM actions WHERE id = ?", secondID).Scan(&secondItem.ID, &secondItem.WorkoutID, &secondItem.Name, &secondItem.Equipment, &secondItem.ActionType, &secondItem.ActionLength, &secondItem.Pos)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	firstPos := strconv.Itoa(firstItem.Pos)
+	secondPos := strconv.Itoa(secondItem.Pos)
+	fmt.Println(firstItem.Pos, firstPos)
+
+	res, err1 := database.Prepare("UPDATE `actions` SET pos = ? WHERE id = ?")
+	res.Exec(secondPos, firstItem.ID)
+	if err1 != nil {
+		fmt.Println(err1)
+	}
+	res2, err2 := database.Prepare("UPDATE `actions` SET pos = ? WHERE id = ?")
+	res2.Exec(firstPos, secondItem.ID)
+	if err2 != nil {
+		fmt.Println(err2)
+	}
+
+}
+
 func (action *Action) Create() map[string]interface{} {
 	if res, ok := action.Validate(); !ok {
 		return res
 	}
-	fmt.Println(action.WorkoutID, action.Name, action.Equipment, action.ActionType, action.ActionLength)
-	database := GetDB()
-	statement, _ := database.Prepare("INSERT INTO `actions` (`workout_id`, `name`,`equipment`,`action_type`,`action_length`) VALUES (?,?,?,?,?)")
-	result, err := statement.Exec(action.WorkoutID, action.Name, action.Equipment, action.ActionType, action.ActionLength)
+
+	pos := GetActionsNoByWorkoutID(action.WorkoutID)
+
+	statement, _ := GetDB().Prepare("INSERT INTO `actions` (`workout_id`, `name`,`equipment`,`action_type`,`action_length`,`pos`) VALUES (?,?,?,?,?,?)")
+
+	result, err := statement.Exec(action.WorkoutID, action.Name, action.Equipment, action.ActionType, action.ActionLength, pos)
 
 	UpdateActionNos(action.WorkoutID, "+1")
 
@@ -66,17 +104,15 @@ func (action *Action) Create() map[string]interface{} {
 }
 
 func getWorkID(id string) int {
-	var workoutId int
+	var workoutID int
 	database := GetDB()
-	err := database.QueryRow("SELECT workout_id FROM actions WHERE id = ?", id).Scan(&workoutId)
+	err := database.QueryRow("SELECT workout_id FROM actions WHERE id = ?", id).Scan(&workoutID)
 
 	if err != nil {
 		panic(err.Error())
 	}
 
-	//workoutIdInt, _ := strconv.Atoi(workoutId)
-
-	return workoutId
+	return workoutID
 }
 
 func DeleteAction(id string) map[string]interface{} {

@@ -69,6 +69,17 @@ func GetWorkoutDetails(id string) Workout {
 	return workout
 }
 
+func GetActionsNoByWorkoutID(workoutID int) int {
+	var actionNo int
+	err := GetDB().QueryRow("SELECT `actions_no` FROM workouts WHERE id = ?", workoutID).Scan(&actionNo)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	return actionNo
+}
+
 func UpdateActionNos(id int, change string) {
 	s := fmt.Sprintf("UPDATE `workouts` SET `actions_no` = `actions_no` %s   WHERE id = %v", change, id)
 	//database := GetDB()

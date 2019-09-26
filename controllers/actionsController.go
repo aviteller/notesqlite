@@ -40,6 +40,21 @@ var GetActionsForWorkout = func(w http.ResponseWriter, r *http.Request) {
 
 }
 
+var SwapActionPos = func(w http.ResponseWriter, r *http.Request) {
+
+	params := mux.Vars(r)
+
+	firstID := params["firstID"]
+	secondID := params["secondID"]
+
+	models.SwapActionPos(firstID, secondID)
+
+	res := u.Message(true, "success")
+
+	u.Respond(w, res)
+
+}
+
 var UpdateAction = func(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
