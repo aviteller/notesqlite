@@ -1,7 +1,12 @@
 package models
 
 import (
+	"bytes"
+	"encoding/csv"
 	"fmt"
+	"os"
+	"reflect"
+	"strconv"
 
 	u "../utils"
 )
@@ -116,4 +121,111 @@ func (workout *Workout) UpdateWorkout(id string) map[string]interface{} {
 	res["workout"] = workout
 	return res
 
+}
+
+// func ToSlice(workout Workout) (values []string, headers []string) {
+
+// 	headers = GetFields(workout)
+
+// 	for _, v := range headers {
+// 		values = append(values, GetFields(v)...)
+// 	}
+
+// 	return
+// }
+
+func GetHeaders(a interface{}) (headers []string) {
+	v := reflect.ValueOf(a)
+
+	for j := 0; j < v.NumField(); j++ {
+		n := v.Type().Field(j).Name
+
+		headers = append(headers, n)
+
+	}
+	return
+}
+
+func GetFields(i interface{}) (values []string) {
+	v := reflect.ValueOf(i)
+
+	for j := 0; j < v.NumField(); j++ {
+		intVal := v.Field(j).Interface()
+		if str, ok := intVal.(int); ok {
+			str2 := strconv.Itoa(str)
+			values = append(values, str2)
+		} else {
+			values = append(values, v.Field(j).String())
+		}
+	}
+	return values
+}
+
+func LoadWorkoutToFile(id string) {
+	workout := GetWorkoutDetails(id)
+	actions := GetActionsForWorkout(id)
+
+	filename := "test" + id + ".csv"
+
+	file, err := os.OpenFile("./csvs/"+filename, os.O_CREATE|os.O_WRONLY, 0777)
+	defer file.Close()
+
+	if err != nil {
+		os.Exit(1)
+	}
+
+	w := csv.NewWriter(file)
+	headers := GetHeaders(workout)
+	actionHeaders := GetHeaders(actions[0])
+	values := GetFields(workout)
+
+	if err := w.Write(headers); err != nil {
+		//write failed do something
+	}
+
+	if err := w.Write(values); err != nil {
+		//write failed do something
+	}
+	if err := w.Write(actionHeaders); err != nil {
+		//write failed do something
+	}
+
+	for _, action := range actions {
+		actionValues := GetFields(action)
+		if err := w.Write(actionValues); err != nil {
+			//write failed do something
+		}
+	}
+	w.Flush()
+}
+
+func ExportWorkout(id string) *bytes.Buffer {
+	workout := GetWorkoutDetails(id)
+	actions := GetActionsForWorkout(id)
+	b := &bytes.Buffer{}
+	w := csv.NewWriter(b)
+	headers := GetHeaders(workout)
+	actionHeaders := GetHeaders(actions[0])
+	values := GetFields(workout)
+
+	if err := w.Write(headers); err != nil {
+		//write failed do something
+	}
+
+	if err := w.Write(values); err != nil {
+		//write failed do something
+	}
+	if err := w.Write(actionHeaders); err != nil {
+		//write failed do something
+	}
+
+	for _, action := range actions {
+		actionValues := GetFields(action)
+		if err := w.Write(actionValues); err != nil {
+			//write failed do something
+		}
+	}
+	w.Flush()
+
+	return b
 }

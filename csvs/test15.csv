@@ -1,0 +1,9 @@
+ID,Name,Duration,WorkoutType,ActionsNo,Pos
+15,test,22,22,6,0
+ID,WorkoutID,Name,Equipment,ActionType,ActionLength,Pos
+24,15,7,7,reps,7,5
+34,15,sad,sasda,reps,33,6
+29,15,3,4,time,4,7
+28,15,3,3,reps,3,9
+27,15,2,2,2,2,10
+18,15,1,1,,1,11

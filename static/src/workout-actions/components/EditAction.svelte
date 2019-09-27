@@ -5,6 +5,7 @@
   import Modal from "../../UI/Modal.svelte";
   import { isEmpty, isValidEmail } from "../../helpers/validation";
   import actions from "../actions-store.js";
+  import Select from "../../UI/Select.svelte";
 
   export let id = null;
   export let workoutID;
@@ -23,16 +24,23 @@
         action_length = selectedAction.action_length.toString();
         equipment = selectedAction.equipment;
       }
-      console.log(name, action_type, action_length, equipment);
     });
 
     unsubscribe();
   }
 
+  const actionTypes = [
+    { value: "time", label: "Time" },
+    { value: "reps", label: "Reps" }
+  ];
+  const handleSelect = e => {
+    action_type = e.detail;
+  };
+
   $: nameValid = !isEmpty(name);
-  $: action_typeValid = !isEmpty(action_type);
+  // $: action_typeValid = !isEmpty(action_type);
   $: action_lengthValid = !isEmpty(action_length);
-  $: formIsValid = nameValid && action_typeValid && action_lengthValid;
+  $: formIsValid = nameValid && action_lengthValid;
 
   const dispatch = createEventDispatcher();
 
@@ -84,7 +92,7 @@
             ...newAction,
             id: data.action.id
           });
-          dispatch("add")
+          dispatch("add");
           cancel();
         })
         .catch(err => console.log(err));
@@ -96,7 +104,7 @@
     })
       .then(res => {
         actions.removeAction(id);
-        dispatch("remove")
+        dispatch("remove");
         cancel();
       })
       .catch(err => console.log(err));
@@ -119,13 +127,11 @@
       valid={nameValid}
       validityMessage="Please enter valid name"
       on:input={e => (name = e.target.value)} />
-    <TextInput
-      id="action_type"
-      label="Type"
-      value={action_type}
-      valid={action_typeValid}
-      validityMessage="Please enter valid action_type"
-      on:input={e => (action_type = e.target.value)} />
+    <Select
+      options={actionTypes}
+      selected={action_type}
+      on:selectchange={handleSelect}
+      label="Type" />
     <TextInput
       id="action_length"
       label="Action Length"
@@ -134,7 +140,6 @@
       type="number"
       validityMessage="Please enter valid action_length"
       on:input={e => (action_length = e.target.value)} />
-
     <TextInput
       id="equipment"
       label="Equipment"

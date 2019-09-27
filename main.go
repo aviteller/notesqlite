@@ -32,6 +32,7 @@ func main() {
 	router.HandleFunc("/api/workouts", controllers.CreateWorkout).Methods("POST")
 	router.HandleFunc("/api/workouts", controllers.GetWorkouts).Methods("GET")
 	router.HandleFunc("/api/workouts/{id}", controllers.GetWorkoutDetails).Methods("GET")
+	router.HandleFunc("/api/workoutexport/{id}", controllers.ExportWorkout).Methods("GET")
 	router.HandleFunc("/api/workouts/{id}", controllers.DeleteWorkout).Methods("DELETE")
 	router.HandleFunc("/api/workouts/{id}", controllers.UpdateWorkout).Methods("PUT")
 

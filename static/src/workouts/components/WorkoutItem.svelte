@@ -15,21 +15,17 @@
 
   const dispatch = createEventDispatcher();
 
-  // const toggleLike = () => {
-  //   isLoading = true;
-  //   fetch(`http://localhost:9000/api/meetups/togglelike/${id}`, {
-  //     method: "PUT"
-  //   })
-  //     .then(res => {
-  //       isLoading = false;
-
-  //       meetups.toggleLike(id);
-  //     })
-  //     .catch(err => {
-  //       isLoading = false;
-  //       console.log(err);
-  //     });
-  // };
+  const exportWorkout = () => {
+    fetch(`http://localhost:9000/api/workoutexport/${id}`)
+      .then(res => {
+       
+        window.open(res.url, '_blank')
+        
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
 </script>
 
 <style>
@@ -82,24 +78,22 @@
 
 <article>
   <header>
-    <h1>
-      {name}
-    </h1>
+    <h1>{name}</h1>
     {#if duration}
-    <h2>Time: {duration}</h2>
+      <h2>Time: {duration}</h2>
     {/if}
     {#if workout_type}
-    <p>Workout type: {workout_type}</p>
+      <p>Workout type: {workout_type}</p>
     {/if}
   </header>
 
   <div class="content">
-  {#if actions_no}
-    <p>No of actions: { actions_no}</p>
+    {#if actions_no}
+      <p>No of actions: {actions_no}</p>
     {/if}
   </div>
   <footer>
-  
+
     {#if isLoading}
       <span>Changing...</span>
     {:else}
@@ -111,6 +105,7 @@
       </Button> -->
     {/if}
     <Button href={`/workouts/${id}`}>Show Details</Button>
+    <Button on:click={exportWorkout}>exportWorkout</Button>
     <!-- <Button on:click={() => dispatch('showdetails', id)}>Show Details</Button> -->
 
   </footer>

@@ -82,3 +82,10 @@ var DeleteWorkout = func(w http.ResponseWriter, r *http.Request) {
 	res["data"] = id
 	u.Respond(w, res)
 }
+var ExportWorkout = func(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	data := models.ExportWorkout(id)
+	w.Header().Set("Content-Type", "text/csv") // setting the content type header to text/csv
+	w.Header().Set("Content-Disposition", "attachment;filename=workout-"+id+".csv")
+	w.Write(data.Bytes())
+}
