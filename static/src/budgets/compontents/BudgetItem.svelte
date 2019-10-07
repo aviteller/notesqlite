@@ -3,7 +3,8 @@
 
   export let budget;
 
-  const { id, name, category, price, type, date } = budget;
+  const { id, name, category, price, type} = budget;
+  const date = budget.date.split("T")[0]
 </script>
 
 <tr>
