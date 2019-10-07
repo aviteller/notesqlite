@@ -21,7 +21,13 @@ func InitTables() {
 	// actionType: "time",
 	// actionLength: "60"
 	GetDB().Exec("CREATE TABLE IF NOT EXISTS actions (id INTEGER PRIMARY KEY autoincrement, workout_id int, name text, equipment TEXT, action_type text, action_length int DEFAULT 0, pos int DEFAULT 0)")
-
+	// id: 3,
+	// name: "rent",
+	// category: "house",
+	// price: 1000.0,
+	// type: "out",
+	// date: "01-9-2019"
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY autoincrement, name text, category TEXT, price FLOAT, type int DEFAULT 0, date DATE)")
 }
 
 //GetDB opens connection to sqlite db

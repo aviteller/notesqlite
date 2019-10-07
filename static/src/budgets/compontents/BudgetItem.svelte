@@ -11,7 +11,7 @@
   <td>{name}</td>
   <td>{category}</td>
   <td>{price}</td>
-  <td>{type}</td>
+  <td>{type?'OUT':'IN'}</td>
   <td>{date}</td>
   <td>
     <Button>Edit</Button>

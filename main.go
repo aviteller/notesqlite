@@ -42,6 +42,9 @@ func main() {
 	router.HandleFunc("/api/actions/{id}", controllers.DeleteAction).Methods("DELETE")
 	router.HandleFunc("/api/actions/{id}", controllers.UpdateAction).Methods("PUT")
 
+	router.HandleFunc("/api/budgets", controllers.CreateBudget).Methods("POST")
+	router.HandleFunc("/api/budgets", controllers.GetBudgets).Methods("GET")
+
 	router.PathPrefix("/").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 	//router.PathPrefix("/workouts").Handler(http.FileServer(rice.MustFindBox("static/public").HTTPBox()))
 

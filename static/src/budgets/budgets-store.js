@@ -24,6 +24,23 @@ const budgets = writable([
     price: 1000.0,
     type: "out",
     date: "01-9-2019"
+  },
+  {
+    id: 4,
+    name: "rent",
+    category: "house",
+    price: 1000.0,
+    type: "out",
+    date: "01-10-2019"
+  
+  },
+  {
+    id: 5,
+    name: "wage",
+    category: "wage",
+    price: 1994.95,
+    type: "in",
+    date: "03-9-2019"
   }
 ]);
 
