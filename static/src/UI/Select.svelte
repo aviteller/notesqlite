@@ -2,7 +2,7 @@
   import { createEventDispatcher } from "svelte";
 
   export let options;
-  export let label = "Select";
+  export let label = null;
   export let placeholder = "--Select--";
   export let selected = null;
 
@@ -14,14 +14,17 @@
 </script>
 
 <style>
-label {
-  margin-bottom: 10px;
-}
+  label {
+    margin-bottom: 10px;
+  }
   select {
     width: 100%;
   }
 </style>
-<label>{label}</label>
+
+{#if label}
+  <label>{label}</label>
+{/if}
 <select bind:value={selected} on:change={handleChange}>
   <option value="" disabled>{placeholder}</option>
   {#each options as option}

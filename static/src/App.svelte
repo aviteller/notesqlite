@@ -1,9 +1,9 @@
 <script>
   import Header from "./UI/Header.svelte";
   import routes from "./routes";
-  import Router from "svelte-spa-router";
-
-  let title = "notes";
+  import Router, {location, querystring} from "svelte-spa-router";
+  
+  let title = "App";
 </script>
 
 <style>

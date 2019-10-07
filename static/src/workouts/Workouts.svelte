@@ -9,7 +9,8 @@
   import Error from "../UI/Error.svelte";
   import LoadingSpinner from "../UI/LoadingSpinner.svelte";
   import workouts from "./workouts-store.js";
-
+  import {location, querystring} from "svelte-spa-router";
+console.log($location)
 
 
   //let loadedMeetups = [];

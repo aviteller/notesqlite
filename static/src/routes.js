@@ -1,5 +1,6 @@
 import Notes from "./notes/Notes.svelte";
 import Workout from "./workouts/Workouts.svelte";
+import Budget from "./budgets/Budgets.svelte";
 import WorkoutDetail from "./workouts/components/WorkoutDetail.svelte";
 
 // This demonstrates how to pass routes as a POJO (Plain Old JavaScript Object) or a JS Map
@@ -19,7 +20,11 @@ if (!urlParams.has("routemap")) {
     "/workouts": Workout,
 
     // Using named parameters, with last being optional
-    "/workouts/:id": WorkoutDetail
+    "/workouts/:id": WorkoutDetail,
+
+    "/budgets": Budget,
+
+    // Using named parameters, with last being optional
   };
 } else {
   routes = new Map();

@@ -13,20 +13,22 @@
     background-color: white;
     border-bottom: 12px solid #199b14;
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-content: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.26);
-    margin-bottom: 20px;
+    margin-bottom: 1rem;
   }
 
   h1 {
     color: black;
     margin-top: 5px;
     text-transform: uppercase;
+    margin-left: 2rem; 
   }
 
   .links {
     margin-top: 1rem;
+    margin-right: 2rem;
   }
 </style>
 
@@ -35,8 +37,8 @@
     <slot />
   </h1>
   <div class="links">
-    <Button href="/workouts">Workouts</Button>
     <Button href="/">Notes</Button>
-
+    <Button href="/workouts">Workouts</Button>
+    <Button href="/budgets">Budget</Button>
   </div>
 </header>

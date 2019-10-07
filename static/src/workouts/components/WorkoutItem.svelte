@@ -105,7 +105,7 @@
       </Button> -->
     {/if}
     <Button href={`/workouts/${id}`}>Show Details</Button>
-    <Button on:click={exportWorkout}>exportWorkout</Button>
+    <Button on:click={exportWorkout}>Print</Button>
     <!-- <Button on:click={() => dispatch('showdetails', id)}>Show Details</Button> -->
 
   </footer>
