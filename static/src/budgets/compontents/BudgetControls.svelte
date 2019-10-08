@@ -1,8 +1,10 @@
 <script>
+ import { createEventDispatcher } from "svelte";
   import Select from "../../UI/Select.svelte";
   import Filter from "./BudgetFilter.svelte";
-
+  import BudgetStats from "./BudgetStats.svelte";
   export let selectedMonth = null;
+  const dispatch = createEventDispatcher();
 
   if (selectedMonth === null) {
     let d = new Date();
@@ -23,6 +25,12 @@
     { label: "Nov", value: 11 },
     { label: "Dec", value: 12 }
   ];
+
+
+  const handleSelect = (e) => {
+    dispatch('changemonth', e.detail)
+    selectedMonth = e.detail
+  }
 </script>
 
 <style>
@@ -39,11 +47,12 @@
 <div class="controls">
 
   <div class="month">
-
-    <Select options={months} selected={parseInt(selectedMonth)} />
+    <Select options={months} selected={parseInt(selectedMonth)} on:selectchange={handleSelect}/>
+  </div>
+  <div class="stats">
+  <BudgetStats month={selectedMonth}/>
   </div>
   <div class="table-filter">
-
     <Filter on:select/>
   </div>
 </div>

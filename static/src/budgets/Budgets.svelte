@@ -4,8 +4,16 @@
   import budgets from "./budgets-store.js";
 
   let isLoading = true;
+  let editMode = false;
+  let editId = null;
+  let month = new Date().getMonth() + 1;
 
-    fetch(`http://localhost:9000/api/budgets`)
+  const changeMonth = e => {
+    getBudgets(e.detail);
+  };
+
+  const getBudgets = month => {
+    fetch(`http://localhost:9000/api/budgets/${month}`)
       .then(res => {
         if (!res.ok) {
           throw new Error("Issue fetching meetups");
@@ -30,10 +38,32 @@
         error = err;
         isLoading = false;
       });
+  };
 
+  getBudgets(month);
+
+  const startEdit = e => {
+    cancelEdit();
+    setTimeout(() => {
+      editMode = true;
+      editId = e.detail;
+    }, 500);
+  };
+
+  const cancelEdit = () => {
+    editMode = false;
+    editId = null;
+  };
 </script>
 
-<BudgetForm />
+{#if editMode}
+  <BudgetForm id={editId} on:cancel={cancelEdit} />
+{:else}
+  <BudgetForm />
+{/if}
 {#if !isLoading}
-<BudgetTable budgets={$budgets} />
+  <BudgetTable
+    budgets={$budgets}
+    on:edit={startEdit}
+    on:changemonth={changeMonth} />
 {/if}

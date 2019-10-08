@@ -39,24 +39,26 @@
   }
 </style>
 
-<BudgetControls on:select={setFilter} />
+<BudgetControls on:select={setFilter} on:changemonth/>
 <section id="budget-table">
 
   {#if filteredBudgets}
     {#if filter !== 3}
       <Table headers={tableHeaders}>
         {#each filteredBudgets as budget (budget.id)}
-          <BudgetItem {budget} />
+          <BudgetItem {budget} on:edit/>
         {/each}
       </Table>
     {:else}
       {#each filteredBudgets as filteredBudget, i}
-        <Table headers={tableHeaders} title={i == 0 ? 'IN' : 'OUT'}>
-          {#each filteredBudget as budget (budget.id)}
-            <BudgetItem {budget} />
-          {/each}
-        </Table>
-        <hr />
+        {#if filteredBudget}
+          <Table headers={tableHeaders} title={i == 0 ? 'IN' : 'OUT'}>
+            {#each filteredBudget as budget (budget.id)}
+              <BudgetItem {budget} on:edit/>
+            {/each}
+          </Table>
+          <hr />
+        {/if}
       {/each}
     {/if}
   {:else}

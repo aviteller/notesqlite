@@ -76,6 +76,6 @@
       selectedButton = 3;
       dispatch('select', 3);
     }}>
-    SEPERATE
+    SEPARATE
   </button>
 </div>
