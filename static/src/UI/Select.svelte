@@ -4,12 +4,16 @@
   export let options;
   export let label = null;
   export let placeholder = "--Select--";
-  export let selected = null;
+  export let selectedValue = null;
+  export let selectID = null;
+  export let disabled = true;
 
   const dispatch = createEventDispatcher();
 
   const handleChange = () => {
-    dispatch("selectchange", selected);
+    let select = document.querySelector(`#${selectID}`);
+    let selectedLabel = select.options[select.selectedIndex].innerHTML;
+    dispatch("selectchange", {selectedValue, selectedLabel});
   };
 </script>
 
@@ -40,8 +44,8 @@
   {#if label}
     <label>{label}</label>
   {/if}
-  <select bind:value={selected} on:change={handleChange}>
-    <option value="" disabled>{placeholder}</option>
+  <select id={selectID} bind:value={selectedValue} on:change={handleChange}>
+    <option value="" disabled={disabled}>{placeholder}</option>
     {#each options as option}
       <option value={option.value}>{option.label}</option>
     {/each}

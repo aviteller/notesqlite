@@ -6,8 +6,8 @@ import (
 )
 
 func InitTables() {
-	GetDB().Exec("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY autoincrement, title VARCHAR(255), message TEXT)")
 
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY autoincrement, title VARCHAR(255), message TEXT)")
 	//  id: 1,
 	// 	name: "workout1",
 	// 	duration: "10",
@@ -27,7 +27,9 @@ func InitTables() {
 	// price: 1000.0,
 	// type: "out",
 	// date: "01-9-2019"
-	GetDB().Exec("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY autoincrement, name text, category TEXT, price FLOAT, type int DEFAULT 0, date DATE)")
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS budgets (id INTEGER PRIMARY KEY autoincrement, name text, category_id int, price FLOAT, type int DEFAULT 0, date DATE)")
+
+	GetDB().Exec("CREATE TABLE IF NOT EXISTS budget_categories (id INTEGER PRIMARY KEY autoincrement, name text, type int DEFAULT 0, deleted int DEFAULT 0)")
 }
 
 //GetDB opens connection to sqlite db

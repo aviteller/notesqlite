@@ -36,7 +36,7 @@ func (b *Budget) Create() map[string]interface{} {
 		return res
 	}
 	database := GetDB()
-	statement, err := database.Prepare("INSERT INTO `budgets` (`name`,`category`,`price`,`type`,`date`) VALUES (?,?,?,?,?)")
+	statement, err := database.Prepare("INSERT INTO `budgets` (`name`,`category_id`,`price`,`type`,`date`) VALUES (?,?,?,?,?)")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -54,7 +54,13 @@ func (b *Budget) Create() map[string]interface{} {
 func GetBudgets(month string) []Budget {
 	var budgets []Budget
 	database := GetDB()
-	rows, _ := database.Query("SELECT * FROM budgets WHERE strftime('%m', date) = ?", month)
+	rows, err := database.Query(`SELECT b.id, b.name, c.name, b.price, b.type, b.date FROM budgets b 
+														LEFT JOIN (SELECT id, name FROM budget_categories WHERE deleted = 0) c ON(c.id = b.category_id)
+														WHERE strftime('%m', b.date) = ?`, month)
+
+	if err != nil {
+		fmt.Println(err)
+	}
 	for rows.Next() {
 		var budget Budget
 		_ = rows.Scan(&budget.ID, &budget.Name, &budget.Category, &budget.Price, &budget.Type, &budget.Date)
@@ -100,7 +106,7 @@ func (b *Budget) UpdateBudget(id string) map[string]interface{} {
 	}
 
 	database := GetDB()
-	statement, _ := database.Prepare("UPDATE `budgets` SET `name`= ?, `category`=?, `price`=?, `type`=?, `date`=? WHERE id =?")
+	statement, _ := database.Prepare("UPDATE `budgets` SET `name`= ?, `category_id`=?, `price`=?, `type`=?, `date`=? WHERE id =?")
 	result, _ := statement.Exec(b.Name, b.Category, b.Price, b.Type, b.Date, id)
 
 	res := u.Message(true, "success")

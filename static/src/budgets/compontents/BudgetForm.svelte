@@ -1,10 +1,11 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import Select from "../../UI/Select.svelte";
   import TextInput from "../../UI/TextInput.svelte";
   import Button from "../../UI/Button.svelte";
   import { isEmpty } from "../../helpers/validation";
   import budgets from "../budgets-store.js";
+  import categories from "../budget-categories-store.js";
 
   export let id = null;
 
@@ -23,17 +24,43 @@
 
   let today = new Date();
   let name = "";
-  let category = 2;
+  let category = 0;
+  let categoryLabel = "";
   let price = "";
   let date = formatDate(today);
   let type = 1;
 
   const types = [{ label: "IN", value: 0 }, { label: "OUT", value: 1 }];
-  const categories = [
-    { label: "wage", value: 1 },
-    { label: "grocery", value: 2 },
-    { label: "household", value: 3 }
-  ];
+
+  const getCategories = (type = 1) => {
+    fetch(`http://localhost:9000/api/budgetcategories/${type}`)
+      .then(res => {
+        if (!res.ok) {
+          throw new Error("Issue fetching meetups");
+        }
+        return res.json();
+      })
+      .then(data => {
+        if (!data.status) {
+          error = data;
+        } else {
+          const loadedCategories = [];
+          for (const key in data.data) {
+            loadedCategories.push({
+              ...data.data[key]
+            });
+          }
+          categories.setBudgetCategories(loadedCategories);
+        }
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  onMount(() => {
+    getCategories(1);
+  });
 
   if (id) {
     const unsubscribe = budgets.subscribe(items => {
@@ -57,11 +84,15 @@
   $: formIsValid = nameValid;
 
   const handleSelect = (e, field) => {
+    
     switch (field) {
       case "category":
-        category = e.detail;
+        category = e.detail.selectedValue;
+        categoryLabel = e.detail.selectedLabel;
+        break;
       case "type":
-        type = e.detail;
+        type = e.detail.selectedValue;
+        getCategories(e.detail.selectedValue)
     }
   };
 
@@ -70,11 +101,13 @@
   const submitForm = () => {
     const newBudget = {
       name,
-      category: categories.find(({ value }) => value === category).label,
+      category:category.toString(),
       price: parseFloat(price),
       date,
       type
     };
+
+    
     if (id) {
       fetch(`http://localhost:9000/api/budgets/${id}`, {
         method: "PUT",
@@ -111,8 +144,10 @@
           if (!data.status) {
             throw new Error(data.message);
           }
+
           cancel();
-          budgets.addBudget({ ...newBudget, id: data.budget.id });
+         
+          budgets.addBudget({ ...newBudget, id: data.budget.id,  category:categoryLabel});
         })
         .catch(err => console.log(err));
     }
@@ -122,7 +157,6 @@
   const cancel = () => {
     dispatch("cancel");
   };
-
 </script>
 
 <style>
@@ -157,11 +191,14 @@
   <Select
     options={types}
     selected={type}
+    selectID="type"
     on:selectchange={e => handleSelect(e, 'type')}
     label="Type" />
   <Select
-    options={categories}
+    options={$categories}
     selected={category}
+    selectID="categories"
+    disabled={false}
     on:selectchange={e => handleSelect(e, 'category')}
     label="Category" />
 
