@@ -1,6 +1,7 @@
 <script>
   import NoteTable from "./components/NoteTable.svelte";
   import Button from "../UI/Button.svelte";
+  import Modal from "../UI/Modal.svelte";
   import Form from "./components/Form.svelte";
   import notes from "./notes-store.js";
 
@@ -49,6 +50,8 @@
     editMode = null;
   };
 </script>
+<Modal>
+
 
 <div style="float:right; margin-right:8%;">
   <Button on:click={() => (editMode = 'new')} color="success">New Note</Button>
@@ -60,3 +63,5 @@
 {:else}
   <NoteTable notes={$notes} on:edit={startEdit} />
 {/if}
+</Modal>
+

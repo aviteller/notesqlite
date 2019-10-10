@@ -1,4 +1,5 @@
 import Notes from "./notes/Notes.svelte";
+import Form from "./notes/components/Form.svelte";
 import Workout from "./workouts/Workouts.svelte";
 import Budget from "./budgets/Budgets.svelte";
 import WorkoutDetail from "./workouts/components/WorkoutDetail.svelte";
@@ -23,6 +24,7 @@ if (!urlParams.has("routemap")) {
     "/workouts/:id": WorkoutDetail,
 
     "/budgets": Budget,
+    "/addnote": Form,
 
     // Using named parameters, with last being optional
   };

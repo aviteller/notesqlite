@@ -4,6 +4,7 @@
   import Modal from "../../UI/Modal.svelte";
   import TextInput from "../../UI/TextInput.svelte";
   import Button from "../../UI/Button.svelte";
+  import { location, pop } from "svelte-spa-router";
   const dispatch = createEventDispatcher();
 
   export let ID = null;
@@ -20,6 +21,14 @@
 
     unsubscribe();
   }
+
+  const cancelNote = () => {
+    if ($location === "/addnote") {
+      pop();
+    } else {
+      dispatch("cancel");
+    }
+  };
 
   const onSubmit = () => {
     let newNote = {
@@ -68,7 +77,12 @@
               throw new Error(data.message);
             }
             notes.addNote({ ...newNote, id: data.note.id });
-       dispatch("cancel");
+            //console.log($location)
+            if ($location === "/addnote") {
+              pop();
+            } else {
+              dispatch("cancel");
+            }
           })
           .catch(err => console.log(err));
       }
@@ -99,7 +113,7 @@
 
   <div slot="footer">
     <Button on:click={onSubmit}>Submit</Button>
-    <Button color="danger" on:click={() => dispatch('cancel')}>Cancel</Button>
+    <Button color="danger" on:click={cancelNote}>Cancel</Button>
   </div>
 
 </Modal>

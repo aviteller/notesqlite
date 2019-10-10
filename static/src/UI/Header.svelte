@@ -40,5 +40,6 @@
     <Button href="/">Notes</Button>
     <Button href="/workouts">Workouts</Button>
     <Button href="/budgets">Budget</Button>
+    <Button href="/addnote">Add note</Button>
   </div>
 </header>
