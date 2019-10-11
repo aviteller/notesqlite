@@ -11,9 +11,16 @@
   const dispatch = createEventDispatcher();
 
   const handleChange = () => {
-    let select = document.querySelector(`#${selectID}`);
-    let selectedLabel = select.options[select.selectedIndex].innerHTML;
-    dispatch("selectchange", {selectedValue, selectedLabel});
+    if(selectID) {
+
+      let select = document.querySelector(`#${selectID}`);
+      let selectedLabel = select.options[select.selectedIndex].innerHTML;
+      dispatch("selectchange", {selectedValue, selectedLabel});
+    } else {
+
+      dispatch("selectchange", selectedValue);
+    }
+
   };
 </script>
 

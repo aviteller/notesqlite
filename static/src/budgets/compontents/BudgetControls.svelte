@@ -28,6 +28,7 @@
 
 
   const handleSelect = (e) => {
+   
     dispatch('changemonth', e.detail)
     selectedMonth = e.detail
   }
@@ -47,7 +48,7 @@
 <div class="controls">
 
   <div class="month">
-    <Select options={months} selected={parseInt(selectedMonth)} on:selectchange={handleSelect}/>
+    <Select options={months} selectedValue={parseInt(selectedMonth)} on:selectchange={handleSelect}/>
   </div>
   <div class="stats">
   <BudgetStats month={selectedMonth}/>

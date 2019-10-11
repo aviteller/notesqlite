@@ -4,6 +4,7 @@
   import Modal from "../UI/Modal.svelte";
   import Form from "./components/Form.svelte";
   import notes from "./notes-store.js";
+   import { pop } from "svelte-spa-router";
 
   let editedId = null;
   let editMode = null;
@@ -50,7 +51,7 @@
     editMode = null;
   };
 </script>
-<Modal>
+<!-- <Modal title="notes"> -->
 
 
 <div style="float:right; margin-right:8%;">
@@ -63,5 +64,8 @@
 {:else}
   <NoteTable notes={$notes} on:edit={startEdit} />
 {/if}
-</Modal>
+<!-- <footer>
+  <Button color="danger" on:click={() => pop() }>Return</Button>
+</footer>
+</Modal> -->
 

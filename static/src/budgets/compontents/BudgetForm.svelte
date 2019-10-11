@@ -28,9 +28,9 @@
   let categoryLabel = "";
   let price = "";
   let date = formatDate(today);
-  let type = 1;
+  let type = 0;
 
-  const types = [{ label: "IN", value: 0 }, { label: "OUT", value: 1 }];
+  const types = [{ label: "IN", value: 1 }, { label: "OUT", value: 2 }];
 
   const getCategories = (type = 1) => {
     fetch(`http://localhost:9000/api/budgetcategories/${type}`)
@@ -58,41 +58,35 @@
       });
   };
 
-  onMount(() => {
-    getCategories(1);
-  });
-
   if (id) {
     const unsubscribe = budgets.subscribe(items => {
       const selectedBudget = items.find(i => i.id === id);
-      //console.log(selectedBudget)
       if (selectedBudget) {
         name = selectedBudget.name;
-        (category = categories.find(
-          ({ label }) => label === selectedBudget.category
-        ).value),
-          (price = selectedBudget.price);
-        date = selectedBudget.date;
+        category = selectedBudget.category;
+        price = selectedBudget.price;
+        date = selectedBudget.date.split("T")[0];
         type = selectedBudget.type;
       }
     });
 
     unsubscribe();
   }
-
+  onMount(() => {
+    getCategories();
+  });
   $: nameValid = !isEmpty(name);
   $: formIsValid = nameValid;
 
   const handleSelect = (e, field) => {
-    
     switch (field) {
       case "category":
         category = e.detail.selectedValue;
         categoryLabel = e.detail.selectedLabel;
         break;
       case "type":
-        type = e.detail.selectedValue;
-        getCategories(e.detail.selectedValue)
+        type = e.detail.selectedValue === 1 ? 0 : 1;
+        getCategories(type);
     }
   };
 
@@ -101,13 +95,11 @@
   const submitForm = () => {
     const newBudget = {
       name,
-      category:category.toString(),
+      category: category.toString(),
       price: parseFloat(price),
       date,
-      type
+      type: type === 1 ? 0 : 1
     };
-
-    
     if (id) {
       fetch(`http://localhost:9000/api/budgets/${id}`, {
         method: "PUT",
@@ -124,8 +116,8 @@
           if (!data.status) {
             throw new Error(data.message);
           }
-          budgets.updateBudget(id, newBudget);
           cancel();
+          budgets.updateBudget(id, { ...newBudget, category: categoryLabel });
         })
         .catch(err => console.log(err));
     } else {
@@ -145,18 +137,22 @@
             throw new Error(data.message);
           }
 
-          cancel();
-         
-          budgets.addBudget({ ...newBudget, id: data.budget.id,  category:categoryLabel});
-        })
-        .catch(err => console.log(err));
+          budgets.addBudget({
+            ...newBudget,
+            id: data.budget.id,
+            category: categoryLabel
+          });
+        });
+      clear().catch(err => console.log(err));
     }
-    //budgets.addBudget({...newBudget, id:Math.random()})
   };
 
-  const cancel = () => {
-    dispatch("cancel");
+  const clear = () => {
+    name = "";
+    price = "";
   };
+
+  const cancel = () => dispatch("cancel");
 </script>
 
 <style>
@@ -191,6 +187,7 @@
   <Select
     options={types}
     selected={type}
+    disabled={false}
     selectID="type"
     on:selectchange={e => handleSelect(e, 'type')}
     label="Type" />
